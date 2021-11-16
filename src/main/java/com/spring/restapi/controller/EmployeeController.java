@@ -17,17 +17,7 @@ public class EmployeeController {
     @Autowired
     private EmployeeService eService;
 
-    @Value("${app.name}")
-    private String appName;
 
-    @Value("${app.version}")
-    private String appVersion;
-
-    @GetMapping("/version")
-    public String getAppDetails(){
-        return appName + " - " + appVersion;
-    }
-    //localhost:8080/employees
     @GetMapping("/employees")
     public List<Employee> getEmployees(){
 
@@ -35,24 +25,25 @@ public class EmployeeController {
     }
 
     @GetMapping("/employees/{id}")
-    public String getEmployee(@PathVariable Long id){
-        return "Fetching the employee details for the id "+ id;
+    public Employee getEmployee(@PathVariable Long id){
+
+        return eService.getSingleEmployee(id);
     }
 
     @PostMapping("/employees")
-    public String saveEmployee(@RequestBody Employee employee) {
-        return "saving the employee details to the database" + employee;
+    public Employee saveEmployee(@RequestBody Employee employee) {
+        return eService.saveEmployyee(employee);
     }
 
     @PutMapping("/employees/{id}")
     public Employee updateEmployee(@PathVariable Long id, @RequestBody Employee employee){
-        System.out.println("update the employee data for the id" + id);
-        return employee;
+       employee.setId(id);
+       return  eService.updateEmployee(employee);
     }
 
     @DeleteMapping("/employees")
-    public String deleteEmployee(@RequestParam("id") Long id){
-        return "deleting the employee detail has id: " +id;
+    public void deleteEmployee(@RequestParam("id") Long id){
+       eService.deleteEmployee(id);
     }
 
 }
